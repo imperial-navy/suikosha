@@ -1,0 +1,120 @@
+/* ============================================================
+   水交社 — 昭和モダン意匠 樣式帖（Tailwind CSS v4）
+   Suikosha — Shōwa Modern (Art Deco) Theme
+   ============================================================ */
+
+@import "tailwindcss";
+
+@theme {
+  /* 色 — 昭和モダンの調色板 */
+  --color-kon: #16243d;         /* 紺 — 海軍の深き藍 */
+  --color-kon-fukaki: #0c1526;  /* 深紺 */
+  --color-shu: #8b2534;         /* 朱 — 緞帳の紅 */
+  --color-shu-kage: #6f1c28;    /* 朱の陰 */
+  --color-kin: #c9a227;         /* 金 — 眞鍮の輝き */
+  --color-kin-akari: #e6c96a;   /* 明るい金 */
+  --color-zou: #f7f1e3;         /* 象牙 — 招待状の紙 */
+  --color-zou-kage: #efe6cf;    /* 象牙の陰 */
+  --color-sumi: #221c16;        /* 墨 */
+  --color-cha: #6b5b3e;         /* 茶 — 古き寫眞の色 */
+
+  /* 書体 */
+  --font-mincho: "Hiragino Mincho ProN", "Yu Mincho", "YuMincho",
+                 "Noto Serif JP", "MS PMincho", serif;
+
+  /* 影 — 活版風のずらし影 */
+  --shadow-kappan: 5px 5px 0 var(--color-zou-kage);
+}
+
+@layer components {
+  /* 放射光線（大看板・奧付の背景） */
+  .rays-up {
+    background: repeating-conic-gradient(
+      from -90deg at 50% 118%,
+      var(--color-kon-fukaki) 0deg 6deg,
+      var(--color-kon) 6deg 12deg
+    );
+  }
+  .rays-down {
+    background: repeating-conic-gradient(
+      from 90deg at 50% -18%,
+      var(--color-kon-fukaki) 0deg 6deg,
+      var(--color-kon) 6deg 12deg
+    );
+  }
+
+  /* 鋸齒飾り（アール・デコの山形縁） */
+  .zigzag-kin {
+    background:
+      linear-gradient(45deg, var(--color-kin) 25%, transparent 25%) 0 0 / 14px 14px,
+      linear-gradient(-45deg, var(--color-kin) 25%, transparent 25%) 0 0 / 14px 14px,
+      var(--color-kon-fukaki);
+  }
+
+  /* 二重飾り枠（招待状の枠） */
+  .frame-nijuu {
+    border: 3px double var(--color-kin);
+    outline: 1px solid var(--color-kin);
+    outline-offset: 6px;
+  }
+
+  /* 内側の細枠（カードの入れ子飾り） */
+  .frame-uchi { position: relative; }
+  .frame-uchi::before {
+    content: "";
+    position: absolute;
+    inset: 6px;
+    border: 1px solid --alpha(var(--color-kin) / 40%);
+    pointer-events: none;
+  }
+
+  /* 斜め縞（施設カードの視覺意匠） */
+  .stripes-kon    { background: repeating-linear-gradient(135deg, var(--color-kon) 0 18px, var(--color-kon-fukaki) 18px 36px); }
+  .stripes-shu    { background: repeating-linear-gradient(135deg, var(--color-shu) 0 18px, var(--color-shu-kage) 18px 36px); }
+  .stripes-midori { background: repeating-linear-gradient(135deg, #3d5a3d 0 18px, #2c452c 18px 36px); }
+  .stripes-cha    { background: repeating-linear-gradient(135deg, var(--color-cha) 0 18px, #55482f 18px 36px); }
+  .stripes-fuji   { background: repeating-linear-gradient(135deg, #4a3b5c 0 18px, #362a45 18px 36px); }
+  .stripes-asagi  { background: repeating-linear-gradient(135deg, #33646b 0 18px, #244a50 18px 36px); }
+
+  /* 縱書き（會誌の題字） */
+  .tategaki { writing-mode: vertical-rl; }
+
+  /* 意匠罫（左右にすうと消える金の線） */
+  .deco-line::before,
+  .deco-line::after {
+    content: "";
+    flex: 1 1 0%;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-kin), transparent);
+  }
+
+  /* 年表の菱形マーカー */
+  .nenpyo-item { position: relative; }
+  .nenpyo-item::before {
+    content: "◆";
+    position: absolute;
+    left: -0.62rem;
+    top: 0.85rem;
+    color: var(--color-shu);
+    font-size: 0.8rem;
+    line-height: 1;
+    background: var(--color-zou);
+  }
+
+  /* 利用案内の見出し菱形 */
+  .dt-kazari::before {
+    content: "◆ ";
+    color: var(--color-kin);
+    font-size: 0.75em;
+  }
+
+  /* 惹句の飾り菱形 */
+  .catch-kazari::before,
+  .catch-kazari::after {
+    content: "◆";
+    color: var(--color-kin);
+    font-size: 0.7em;
+    margin: 0 1em;
+    vertical-align: 0.15em;
+  }
+}

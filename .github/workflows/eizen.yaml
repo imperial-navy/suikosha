@@ -1,0 +1,89 @@
+# ╔══════════════════════════════════════════════════════════════╗
+# ║                                                              ║
+# ║  水交社 營繕掛 — 會館營繕・公示 pipeline                     ║
+# ║  Suikosha Buildings & Works — 營繕第〇〇一号                 ║
+# ║                                                              ║
+# ║  營繕掛ハ水交社會館ノ營繕（Tailwind CSS ノ組立）竝ニ        ║
+# ║  公示（GitHub Pages ヘノ掛載）ヲ擔當ス。                    ║
+# ║                                                              ║
+# ║  管轄: 水交社 理事長 — 營繕掛長                              ║
+# ║  ※ 水交社ハ海軍將校ノ親睦團體ニシテ、本 pipeline モ亦      ║
+# ║    海軍部內ニテ完結ス。內閣・内務省ノ關與ヲ要セズ。         ║
+# ║                                                              ║
+# ║  本 Repository ハ風刺的創作物（satirical project）ナリ。     ║
+# ╚══════════════════════════════════════════════════════════════╝
+
+name: 🏛 水交社營繕・公示
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: suikosha-eizen
+  cancel-in-progress: true
+
+jobs:
+  eizen-koji:
+    name: 🏛 會館營繕・公示
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: 📥 設計圖ノ受領（チェックアウト）
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Node.js 環境ノ整備
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 📦 建材ノ調達（npm ci）
+        run: |
+          echo "【營繕掛】樣式帖組立用ノ建材ヲ調達ス"
+          npm ci
+
+      - name: 🔨 頁面・樣式帖ノ組立（TypeScript + Tailwind CSS Build）
+        run: |
+          echo "【營繕掛】型式言語（TypeScript）ニテ頁面ヲ組立テ、昭和モダン意匠ノ樣式帖ヲ添フ"
+          echo "  工程壱: tsc — 組立係（build.ts）ノ檢査・變換"
+          echo "  工程弐: node build/build.js — data.ts ノ內容ヲ骨格ニ流シ込ミ index.html ヲ生成"
+          echo "  工程參: tailwindcss — 樣式帖ノ組立"
+          npm run build
+          mkdir -p dist
+          cp index.html style.css dist/
+          echo "組立成果:"
+          ls -la dist/
+
+      - name: 🏛 GitHub Pages 公示設定
+        uses: actions/configure-pages@v5
+
+      - name: 📤 成果物ノ奉呈（Upload Artifact）
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'dist'
+
+      - name: 📜 公示（Deploy to Pages）
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+      - name: 🏛 營繕完了報告
+        run: |
+          echo "╔══════════════════════════════════════════════════════════╗"
+          echo "║  🏛 水交社營繕掛 — 營繕・公示完了報告                   ║"
+          echo "║                                                          ║"
+          echo "║  公示日:   $(TZ=Asia/Tokyo date '+%Y年%m月%d日')         ║"
+          echo "║  公示先:   ${{ steps.deployment.outputs.page_url }}      ║"
+          echo "║                                                          ║"
+          echo "║  會館ノ營繕成リ、廣ク內外ニ公示セリ。                    ║"
+          echo "║  皆樣ノ御來駕ヲ心ヨリオ待チ申シ上ゲテ居リマス。         ║"
+          echo "╚══════════════════════════════════════════════════════════╝"

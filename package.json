@@ -1,0 +1,21 @@
+{
+  "name": "suikosha",
+  "version": "1876.10.1",
+  "description": "水交社 — 帝國海軍將校社交倶樂部ノ假想ウェブサイト（昭和モダン・TypeScript + Tailwind CSS）",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/imperial-navy/suikosha.git"
+  },
+  "scripts": {
+    "build": "tsc && node build/build.js && tailwindcss -i src/style.css -o style.css --minify",
+    "typecheck": "tsc --noEmit",
+    "watch": "tailwindcss -i src/style.css -o style.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.2",
+    "@types/node": "^26.1.1",
+    "tailwindcss": "^4.3.2",
+    "typescript": "^7.0.2"
+  }
+}

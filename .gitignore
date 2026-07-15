@@ -1,0 +1,10 @@
+# 依存
+node_modules/
+
+# 生成物（樣式帖ハ營繕掛ガ CI ニテ組立ツ）
+/style.css
+/dist/
+
+# 生成物（組立係 build.ts ガ生成ス）
+/index.html
+/build/
